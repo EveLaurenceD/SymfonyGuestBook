@@ -5,36 +5,69 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CommentRepository::class)]
+/**
+ * @ORM\Entity(repositoryClass=CommentRepository::class)
+ */
 class Comment
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $author;
 
-    #[ORM\Column(type: 'text')]
+    /**
+     * @ORM\Column(type="text")
+     */
     private $text;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $email;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
     private $createdAt;
 
-    #[ORM\ManyToOne(targetEntity: Conference::class, inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false)]
+    /**
+     * @ORM\ManyToOne(targetEntity=Conference::class, inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
+     */
     private $conference;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $photoFilename;
+
+    public function __toString(): string
+    {
+        return (string) $this->getEmail();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getConference(): ?Conference
+    {
+        return $this->conference;
+    }
+
+   public function setConference(?Conference $conference): self
+    {
+        $this->conference = $conference;
+
+        return $this;
     }
 
     public function getAuthor(): ?string
@@ -83,19 +116,7 @@ class Comment
         $this->createdAt = $createdAt;
 
         return $this;
-    }
-
-    public function getConference(): ?Conference
-    {
-        return $this->conference;
-    }
-
-    public function setConference(?Conference $conference): self
-    {
-        $this->conference = $conference;
-
-        return $this;
-    }
+    }  
 
     public function getPhotoFilename(): ?string
     {
